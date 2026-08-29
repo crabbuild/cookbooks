@@ -1,0 +1,15 @@
+workflows:
+  platform:
+    stages:
+      catalog:
+        cmd:
+          argv:
+            - python3
+            - src/catalog.py
+            - models/model.json
+            - release/catalog.json
+        deps:
+          - src/catalog.py
+          - models/model.json
+        outs:
+          - release/catalog.json

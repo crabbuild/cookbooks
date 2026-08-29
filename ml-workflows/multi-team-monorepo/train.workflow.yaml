@@ -1,0 +1,13 @@
+stages:
+  fit:
+    cmd:
+      argv:
+        - python3
+        - src/train.py
+        - data/features.csv
+        - models/model.json
+    deps:
+      - src/train.py
+      - data/features.csv
+    outs:
+      - models/model.json

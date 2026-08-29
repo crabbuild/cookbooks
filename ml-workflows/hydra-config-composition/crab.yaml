@@ -1,0 +1,39 @@
+params:
+  - params.yaml
+
+metrics:
+  - metrics/evaluation.json
+
+stages:
+  train:
+    cmd:
+      argv:
+        - python3
+        - src/train.py
+        - --params
+        - params.yaml
+        - --output
+        - models/model.json
+    deps:
+      - src/train.py
+    params:
+      - train.model.name
+      - train.model.width
+      - train.optimizer.name
+      - train.optimizer.learning_rate
+      - train.epochs
+    outs:
+      - models/model.json
+
+  evaluate:
+    cmd:
+      argv:
+        - python3
+        - src/evaluate.py
+        - models/model.json
+        - metrics/evaluation.json
+    deps:
+      - src/evaluate.py
+      - models/model.json
+    metrics:
+      - metrics/evaluation.json

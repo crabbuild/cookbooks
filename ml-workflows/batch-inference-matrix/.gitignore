@@ -1,0 +1,9 @@
+.crab/cache/
+.crab/workflow/
+__pycache__/
+*.py[cod]
+crab.lock
+prepared/
+predictions/
+metrics/
+reports/

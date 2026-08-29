@@ -1,0 +1,103 @@
+stages:
+  stable_input:
+    cmd:
+      argv:
+        - python3
+        - src/write_value.py
+        - stable
+        - output/stable.txt
+    deps:
+      - src/write_value.py
+    outs:
+      - output/stable.txt
+
+  risky_transform:
+    cmd:
+      argv:
+        - python3
+        - src/risky.py
+        - control/fail.flag
+        - output/risky.txt
+    deps:
+      - src/risky.py
+      - control/fail.flag
+      - output/stable.txt
+    env:
+      - MODEL_REGION
+    timeout: 10s
+    outs:
+      - output/risky.txt
+
+  dependent_report:
+    cmd:
+      argv:
+        - python3
+        - src/write_value.py
+        - derived-from-risky
+        - reports/dependent.txt
+    deps:
+      - src/write_value.py
+      - output/risky.txt
+    outs:
+      - reports/dependent.txt
+
+  independent_report:
+    cmd:
+      argv:
+        - python3
+        - src/write_value.py
+        - independent-success
+        - reports/independent.txt
+    deps:
+      - src/write_value.py
+    outs:
+      - reports/independent.txt
+
+  optional_report:
+    cmd:
+      argv:
+        - python3
+        - src/write_value.py
+        - enabled-by-environment
+        - reports/optional.txt
+    deps:
+      - src/write_value.py
+      - output/stable.txt
+    condition:
+      env: ENABLE_REPORT
+    outs:
+      - reports/optional.txt
+
+  heartbeat:
+    cmd:
+      argv:
+        - python3
+        - src/heartbeat.py
+        - status/heartbeat.json
+    deps:
+      - src/heartbeat.py
+    nondeterministic: true
+    outs:
+      - status/heartbeat.json
+
+  publish_receipt:
+    cmd:
+      argv:
+        - python3
+        - src/publish.py
+        - executed
+        - output/published.txt
+        - status/publish-events.log
+    deps:
+      - src/publish.py
+      - reports/independent.txt
+    side_effects: true
+    on_cache_hit:
+      argv:
+        - python3
+        - src/publish.py
+        - cache-hit
+        - output/published.txt
+        - status/publish-events.log
+    outs:
+      - output/published.txt

@@ -1,0 +1,72 @@
+vars:
+  - script_dir: src
+
+metrics:
+  - metrics/summary.json
+
+stages:
+  normalize:
+    foreach:
+      north:
+        input: data/north.csv
+      south:
+        input: data/south.csv
+    do:
+      cmd:
+        argv:
+          - python3
+          - ${script_dir}/normalize.py
+          - --input
+          - ${item.input}
+          - --output
+          - prepared/${key}.csv
+      deps:
+        - ${script_dir}/normalize.py
+        - ${item.input}
+      outs:
+        - prepared/${key}.csv
+
+  score:
+    matrix:
+      region: [north, south]
+      model: [linear, robust]
+    cmd:
+      argv:
+        - python3
+        - ${script_dir}/score.py
+        - --input
+        - prepared/${item.region}.csv
+        - --model
+        - models/${item.model}.json
+        - --output
+        - predictions/${key}.csv
+    deps:
+      - ${script_dir}/score.py
+      - prepared/${item.region}.csv
+      - models/${item.model}.json
+    outs:
+      - predictions/${key}.csv
+
+  summarize:
+    cmd:
+      argv:
+        - python3
+        - src/summarize.py
+        - --input
+        - predictions/north-linear.csv
+        - --input
+        - predictions/north-robust.csv
+        - --input
+        - predictions/south-linear.csv
+        - --input
+        - predictions/south-robust.csv
+        - --output
+        - metrics/summary.json
+    deps:
+      - src/summarize.py
+      - predictions/north-linear.csv
+      - predictions/north-robust.csv
+      - predictions/south-linear.csv
+      - predictions/south-robust.csv
+    metrics:
+      - metrics/summary.json

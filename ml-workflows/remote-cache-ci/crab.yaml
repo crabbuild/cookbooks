@@ -1,0 +1,30 @@
+workflows:
+  data:
+    stages:
+      snapshot:
+        cmd:
+          argv:
+            - python3
+            - src/snapshot.py
+            - data/events.csv
+            - snapshots/events.json
+        deps:
+          - src/snapshot.py
+          - data/events.csv
+        outs:
+          - snapshots/events.json
+
+  features:
+    stages:
+      featurize:
+        cmd:
+          argv:
+            - python3
+            - src/featurize.py
+            - snapshots/events.json
+            - features/users.json
+        deps:
+          - src/featurize.py
+          - snapshots/events.json
+        outs:
+          - features/users.json

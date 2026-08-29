@@ -1,0 +1,13 @@
+stages:
+  prepare:
+    cmd:
+      argv:
+        - python3
+        - src/prepare.py
+        - data/input.csv
+        - data/features.csv
+    deps:
+      - src/prepare.py
+      - data/input.csv
+    outs:
+      - data/features.csv

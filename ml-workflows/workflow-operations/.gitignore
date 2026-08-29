@@ -1,0 +1,6 @@
+/.crab/cache/
+/.crab/workflow/
+/crab.lock
+/output/
+/reports/
+/status/

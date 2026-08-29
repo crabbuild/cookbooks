@@ -1,0 +1,6 @@
+defaults:
+  - train/model: linear
+  - train/optimizer: adam
+
+train:
+  epochs: 20

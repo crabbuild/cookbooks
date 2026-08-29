@@ -5,6 +5,5 @@ management.
 
 ## ML workflows
 
-- [Fraud detection](ml-workflows/fraud-detection/README.md) — a dependency-free
-  Python 3 pipeline covering ingestion, feature preparation, model training,
-  evaluation evidence, cache reuse, experiments, and immutable artifacts.
+See the [ML workflow cookbook index](ml-workflows/README.md) for runnable
+pipelines and a command-to-example capability matrix.

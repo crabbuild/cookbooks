@@ -1,0 +1,46 @@
+params:
+  - params.json
+
+metrics:
+  - metrics/evaluation.json
+
+stages:
+  train:
+    cmd:
+      argv:
+        - python3
+        - src/train.py
+        - --data
+        - data/train.csv
+        - --params
+        - params.json
+        - --output
+        - models/model.json
+    deps:
+      - src/train.py
+      - data/train.csv
+    params:
+      - params.json:
+          - train.epochs
+          - train.l2
+          - train.learning_rate
+    outs:
+      - models/model.json
+
+  evaluate:
+    cmd:
+      argv:
+        - python3
+        - src/evaluate.py
+        - --data
+        - data/train.csv
+        - --model
+        - models/model.json
+        - --output
+        - metrics/evaluation.json
+    deps:
+      - src/evaluate.py
+      - data/train.csv
+      - models/model.json
+    metrics:
+      - metrics/evaluation.json
