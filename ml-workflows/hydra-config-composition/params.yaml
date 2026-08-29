@@ -1,0 +1,8 @@
+train:
+  epochs: 20
+  model:
+    name: linear
+    width: 1
+  optimizer:
+    learning_rate: 0.01
+    name: adam

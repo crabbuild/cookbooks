@@ -1,0 +1,18 @@
+metrics:
+  - metrics/evaluation.json
+
+stages:
+  score:
+    cmd:
+      argv:
+        - python3
+        - src/evaluate.py
+        - data/features.csv
+        - models/model.json
+        - metrics/evaluation.json
+    deps:
+      - src/evaluate.py
+      - data/features.csv
+      - models/model.json
+    metrics:
+      - metrics/evaluation.json

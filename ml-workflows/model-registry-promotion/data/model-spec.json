@@ -1,0 +1,9 @@
+{
+  "bias": -0.08,
+  "feature_weights": {
+    "account_age_days": -0.002,
+    "chargeback_rate": 1.8,
+    "transaction_amount": 0.004
+  },
+  "name": "churn-model"
+}

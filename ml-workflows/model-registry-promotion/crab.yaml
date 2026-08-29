@@ -1,0 +1,41 @@
+metrics:
+  - metrics/validation.json
+
+artifacts:
+  churn-model:
+    path: models/churn-model.json
+    type: model
+    desc: Deterministic churn-scoring model used by the cookbook
+    labels:
+      - churn
+      - retention
+    meta:
+      owner: retention-ml
+      framework: portable-json
+
+stages:
+  build:
+    cmd:
+      argv:
+        - python3
+        - src/build_model.py
+        - data/model-spec.json
+        - models/churn-model.json
+    deps:
+      - src/build_model.py
+      - data/model-spec.json
+    outs:
+      - models/churn-model.json
+
+  validate:
+    cmd:
+      argv:
+        - python3
+        - src/validate_model.py
+        - models/churn-model.json
+        - metrics/validation.json
+    deps:
+      - src/validate_model.py
+      - models/churn-model.json
+    metrics:
+      - metrics/validation.json
